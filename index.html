@@ -2,82 +2,157 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DrawScreen</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DrawScreen - Draw on your screen easily</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6fa;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background: #3b82f6;
+      color: #fff;
+      padding: 2rem 1rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    header p {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+    }
+    main {
+      padding: 2rem 1rem;
+    }
+    .screenshots {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .screenshots img {
+      max-width: 280px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .download-btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: #22c55e;
+      color: white;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .download-btn:hover {
+      background: #16a34a;
+    }
+    .stats {
+      margin: 2rem 0;
+      font-size: 1.2rem;
+    }
+    footer {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #e5e7eb;
+    }
+  </style>
 </head>
 <body>
-  <!-- Header -->
   <header>
     <h1>DrawScreen</h1>
-    <p>Draw directly on your screen with hotkeys ✍️</p>
+    <p>Lightweight app to draw directly on your screen with hotkeys 🎨</p>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <img src="assets/ss/ss1.png" alt="App Screenshot" class="hero-img">
-    <a href="https://www.mediafire.com/file/pq0xpfchpbblnly/clientDr.exe/file" class="download-btn">⬇️ Download</a>
-  </section>
-
-  <!-- About -->
-  <section class="about">
-    <h2>About Me</h2>
-    <p>
-      I was amazed by how simple but powerful drawing on your screen could be.
-      This project started as a small experiment, and quickly grew into something
-      I wanted to share with everyone. DrawScreen is lightweight, free, and made
-      with love in Python. ❤️
-    </p>
-  </section>
-
-  <!-- Screenshots -->
-  <section class="screenshots">
+  <main>
     <h2>Screenshots</h2>
-    <div class="gallery">
+    <div class="screenshots">
       <img src="assets/ss/ss1.png" alt="Screenshot 1">
       <img src="assets/ss/ss2.png" alt="Screenshot 2">
       <img src="assets/ss/ss3.png" alt="Screenshot 3">
     </div>
-  </section>
 
-  <!-- FAQ -->
-  <section class="faq">
-    <h2>FAQ</h2>
-    <div class="faq-item">
-      <h3>🖥️ What platforms are supported?</h3>
-      <p>Currently Windows only. Linux/Mac support may come later. Or they are already here, I don't really know, I don't hace a Mac :P </p>
-    </div>
-    <div class="faq-item">
-      <h3>⌨️ What are the hotkeys?</h3>
-      <p>
-        CTRL+ALT+Z → Toggle drawing<br>
-        CTRL+ALT+X → Quit safely<br>
-        O → Increase brush size<br>
-        I → Decrease brush size<br>
-        CTRL+SHIFT+C → Pick color
-      </p>
-    </div>
-    <div class="faq-item">
-      <h3>🆓 Is this free?</h3>
-      <p>Yes! 100% free, but donations are appreciated ❤️</p>
-    </div>
-  </section>
+    <h2>Download</h2>
+    <button class="download-btn">⬇️ Download Now</button>
 
-  <!-- Donate -->
-  <section class="donate">
-    <h2>Support the Project</h2>
-    <p>
-      Help me afford a real website! Goal: €12.50.  
-      Every donation goes directly to hosting and development.
-    </p>
-    <a href="https://buymeacoffee.com/whackkquackk" target="_blank" class="donate-btn">💖 Donate</a>
-  </section>
+    <div class="stats">
+      👁️ Views: <span id="views-count">...</span><br>
+      ⬇️ Downloads: <span id="downloads-count">...</span>
+    </div>
+  </main>
 
-  <!-- Footer -->
   <footer>
-    <p>© 2025 DrawScreen. Made with 🐍 Python.</p>
+    <p>Made with ❤️ by WhackkQuackk • <a href="https://buymeacoffee.com/whackkquackk">Support me</a></p>
   </footer>
+
+  <!-- Firebase Counters -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
+    import { getDatabase, ref, runTransaction, onValue } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDEw59bHhaUpcgYdb9kHVmMNmNoaZO7i48",
+    authDomain: "drawscreen-abfa5.firebaseapp.com",
+    databaseURL: "https://drawscreen-abfa5-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "drawscreen-abfa5",
+    storageBucket: "drawscreen-abfa5.firebasestorage.app",
+    messagingSenderId: "906201269653",
+    appId: "1:906201269653:web:451010cb0e41967e0e229c",
+    measurementId: "G-VMHG8LVS5K"
+  };
+
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const viewsRef = ref(db, 'counters/views');
+    const downloadsRef = ref(db, 'counters/downloads');
+
+    async function increment(refNode, delta = 1) {
+      try {
+        await runTransaction(refNode, current => {
+          if (current === null) return delta;
+          return current + delta;
+        });
+      } catch (e) {
+        console.error('Increment error', e);
+      }
+    }
+
+    // Count a view (once per session)
+    (function countViewOnce() {
+      const key = 'drawscreen_viewed_v1';
+      if (!sessionStorage.getItem(key)) {
+        increment(viewsRef, 1);
+        sessionStorage.setItem(key, '1');
+      }
+    })();
+
+    // Update counters live
+    onValue(viewsRef, snap => {
+      document.getElementById('views-count').textContent = snap.val() || 0;
+    });
+    onValue(downloadsRef, snap => {
+      document.getElementById('downloads-count').textContent = snap.val() || 0;
+    });
+
+    // Download button action
+    const dlBtn = document.querySelector('.download-btn');
+    dlBtn.addEventListener('click', async () => {
+      await increment(downloadsRef, 1);
+      setTimeout(() => {
+        window.location.href = "https://www.mediafire.com/file/pq0xpfchpbblnly/clientDr.exe/file"; // <-- replace with your .exe/.zip link
+      }, 150);
+    });
+  </script>
 </body>
 </html>
-
