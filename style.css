@@ -1,124 +1,109 @@
-/* General reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  margin: 0;
+  background: #f8fafc;
   color: #222;
   line-height: 1.6;
-  text-align: center;
 }
 
 /* Header */
 header {
-  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  color: #fff;
+  text-align: center;
+  padding: 4rem 1rem;
 }
 header h1 {
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-size: 3rem;
+  margin: 0;
 }
 header p {
-  margin-top: 0.5rem;
-  font-size: 1.2rem;
-}
-
-/* Hero */
-.hero {
-  padding: 2rem 1rem;
-}
-.hero-img {
-  max-width: 600px;
-  width: 90%;
-  border-radius: 15px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  margin: 1rem 0 2rem;
 }
 .download-btn {
-  display: inline-block;
-  background: #ff6b6b;
-  color: #fff;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: 0.3s;
+  background: #22c55e;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 .download-btn:hover {
-  background: #ff3b3b;
+  background: #16a34a;
 }
 
-/* Sections */
-section {
-  padding: 3rem 1rem;
-}
-section h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-/* About */
-.about p {
-  max-width: 800px;
+/* Main */
+main {
+  max-width: 900px;
   margin: auto;
-  font-size: 1.1rem;
+  padding: 2rem 1rem;
+}
+.stats {
+  text-align: center;
+  margin: 2rem 0;
+  font-size: 1.2rem;
+}
+.stats span {
+  font-weight: bold;
+  color: #3b82f6;
+}
+.section-title {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 2rem;
 }
 
 /* Screenshots */
-.screenshots .gallery {
+.screenshots {
   display: flex;
-  justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+  justify-content: center;
+  margin: 3rem 0;
 }
 .screenshots img {
-  max-width: 250px;
-  width: 100%;
+  max-width: 270px;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform 0.2s;
+}
+.screenshots img:hover {
+  transform: scale(1.05);
 }
 
 /* FAQ */
-.faq .faq-item {
-  margin: 1rem auto;
-  max-width: 600px;
-  text-align: left;
-  background: rgba(255,255,255,0.8);
+.faq {
+  margin: 3rem 0;
+}
+.faq h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+details {
+  background: #fff;
+  margin: 0.5rem 0;
   padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
 }
-.faq .faq-item h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-}
-
-/* Donate */
-.donate p {
-  margin: 1rem auto;
-  max-width: 600px;
-  font-size: 1.1rem;
-}
-.donate-btn {
-  display: inline-block;
-  background: #4CAF50;
-  color: white;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: 0.3s;
-}
-.donate-btn:hover {
-  background: #388E3C;
+details summary {
+  font-weight: bold;
+  outline: none;
 }
 
 /* Footer */
 footer {
-  background: rgba(0,0,0,0.1);
-  padding: 1rem;
-  font-size: 0.9rem;
+  background: #e5e7eb;
+  padding: 1.5rem;
+  text-align: center;
+  margin-top: 3rem;
+}
+footer a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: bold;
 }
