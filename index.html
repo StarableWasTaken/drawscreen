@@ -124,11 +124,14 @@
     const viewsRef = ref(db, "stats/views");
     const downloadsRef = ref(db, "stats/downloads");
 
-    // --- increment view once per session ---
-    try {
+    // Increment view once per session
+      try {
       const KEY = "drawscreen_viewed_v1";
       if (!sessionStorage.getItem(KEY)) {
-        runTransaction(viewsRef, (curr) => (curr) + 1);
+        runTransaction(viewsRef, (curr) => {
+          const num = Number(curr) || 0; // force numeric
+          return num + 1;
+        });
         sessionStorage.setItem(KEY, "1");
       }
     } catch (e) {
@@ -212,4 +215,5 @@
   </script>
 </body>
 </html>
+
 
