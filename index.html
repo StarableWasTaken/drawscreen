@@ -6,7 +6,6 @@
   <title>DrawScreen - Draw on your screen</title>
   <link rel="stylesheet" href="style.css">
   <script type="module">
-    // Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
     import { getDatabase, ref, get, set, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
 
@@ -27,17 +26,14 @@
     const viewsRef = ref(db, 'stats/views');
     const downloadsRef = ref(db, 'stats/downloads');
 
-    // Count view
     runTransaction(viewsRef, (count) => (count || 0) + 1);
 
-    // Update live
     function updateStats() {
       get(viewsRef).then(snap => document.getElementById('views-count').innerText = snap.val() ?? 0);
       get(downloadsRef).then(snap => document.getElementById('downloads-count').innerText = snap.val() ?? 0);
     }
     updateStats();
 
-    // Count downloads
     function handleDownload() {
       runTransaction(downloadsRef, (count) => (count || 0) + 1);
       setTimeout(updateStats, 1000);
@@ -46,6 +42,18 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       document.querySelector(".download-btn").addEventListener("click", handleDownload);
+
+      // Animate FAQ expansion
+      document.querySelectorAll("details").forEach((el) => {
+        el.addEventListener("toggle", () => {
+          if (el.open) {
+            const content = el.querySelector(".faq-content");
+            content.style.maxHeight = content.scrollHeight + "px";
+          } else {
+            el.querySelector(".faq-content").style.maxHeight = null;
+          }
+        });
+      });
     });
   </script>
 </head>
@@ -68,30 +76,40 @@
       <img src="assets/ss/ss3.png" alt="Screenshot 3">
     </div>
 
+    <section class="about">
+      <h2>About Me</h2>
+      <p>
+        Hey! I’m the creator of <b>DrawScreen</b>.  
+        I built this because I was amazed by how useful it is to simply sketch over your screen 
+        — whether for teaching, brainstorming, or just doodling for fun.  
+        My goal is to keep this tool lightweight, free, and easy to use. 🚀
+      </p>
+    </section>
+
     <section class="faq">
       <h2>FAQ</h2>
       <details>
         <summary>❓ How do I start drawing?</summary>
-        <p>Use <b>CTRL+ALT+Z</b> to toggle the drawing window. Then use hotkeys inside it.</p>
+        <div class="faq-content"><p>Use <b>CTRL+ALT+Z</b> to toggle the drawing window. Then use hotkeys inside it.</p></div>
       </details>
       <details>
         <summary>🎨 How do I change brush size?</summary>
-        <p>Press <b>O</b> to increase, <b>I</b> to decrease brush size.</p>
+        <div class="faq-content"><p>Press <b>O</b> to increase, <b>I</b> to decrease brush size.</p></div>
       </details>
       <details>
         <summary>🌈 Can I pick a color?</summary>
-        <p>Yes! Use <b>CTRL+SHIFT+C</b> to pick a color directly from the screen.</p>
+        <div class="faq-content"><p>Yes! Use <b>CTRL+SHIFT+C</b> to pick a color directly from the screen.</p></div>
       </details>
       <details>
         <summary>💾 How big is the app?</summary>
-        <p>The installer is ~50MB because it includes all required libraries to run smoothly on any PC. So <b>don't</b> go and <b>cry about it on Reddit😉</b> </p>
+        <div class="faq-content"><p>The installer is ~50MB because it includes all required libraries to run smoothly on any PC.</p></div>
       </details>
     </section>
   </main>
 
   <footer>
-    <p>☕ Love the project? <a href="https://buymeacoffee.com/whackkquackk" target="_blank">Buy me a coffee a.k.a Donate</a></p>
-    <p>Goal: <b>The Goal Is €12.5</b> to afford a real domain 🚀</p>
+    <p>☕ Love the project? <a href="https://buymeacoffee.com/whackkquackk" target="_blank">Donate!</a></p>
+    <p>Goal: <b>€12.5</b> to afford a real domain 🚀</p>
   </footer>
 </body>
 </html>
