@@ -1,135 +1,97 @@
+/* Gradient background */
 body {
-  font-family: "Segoe UI", Tahoma, sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
-  background: #f8fafc;
-  color: #222;
-  line-height: 1.6;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4e54c8, #8f94fb);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Header */
 header {
-  background: linear-gradient(135deg, #3b82f6, #06b6d4);
-  color: #fff;
   text-align: center;
-  padding: 4rem 1rem;
-}
-header h1 {
-  font-size: 3rem;
-  margin: 0;
-}
-header p {
-  font-size: 1.3rem;
-  margin: 1rem 0 2rem;
-}
-.download-btn {
-  background: #22c55e;
-  border: none;
-  padding: 1rem 2.5rem;
-  font-size: 1.2rem;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.download-btn:hover {
-  background: #16a34a;
-}
-
-/* Main */
-main {
-  max-width: 900px;
-  margin: auto;
   padding: 2rem 1rem;
 }
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  margin: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  background: #fff;
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+.donate {
+  background: #ffcc00;
+  color: #000;
+}
+
+/* Stats */
 .stats {
+  margin-top: 1rem;
   text-align: center;
-  margin: 2rem 0;
-  font-size: 1.2rem;
-}
-.stats span {
-  font-weight: bold;
-  color: #3b82f6;
-}
-.section-title {
-  text-align: center;
-  margin-top: 2rem;
-  font-size: 2rem;
-}
-
-/* Screenshots */
-.screenshots {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 3rem 0;
-}
-.screenshots img {
-  max-width: 270px;
+  background: rgba(255,255,255,0.1);
+  padding: 1rem;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  transition: transform 0.2s;
 }
-.screenshots img:hover {
-  transform: scale(1.05);
+.stats p {
+  margin: 0.3rem 0;
 }
 
-/* About */
-.about {
-  background: #fff;
-  padding: 2rem;
-  margin: 3rem 0;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-.about h2 {
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-/* FAQ */
+/* FAQ Section */
 .faq {
-  margin: 3rem 0;
+  width: 90%;
+  max-width: 600px;
+  margin: 2rem auto;
 }
-.faq h2 {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-details {
-  background: #fff;
-  margin: 0.7rem 0;
-  padding: 0.8rem 1rem;
+.faq-item {
+  background: rgba(255,255,255,0.1);
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  cursor: pointer;
-  transition: 0.2s;
+  margin: 1rem 0;
   overflow: hidden;
+  transition: all 0.3s ease;
 }
-details[open] {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-details summary {
-  font-weight: bold;
+.faq-question {
+  width: 100%;
+  padding: 1rem;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
   outline: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-details .faq-content {
+.faq-answer {
   max-height: 0;
   overflow: hidden;
+  padding: 0 1rem;
   transition: max-height 0.3s ease;
 }
-details[open] .faq-content {
-  margin-top: 0.5rem;
+.faq-answer p {
+  margin: 1rem 0;
+}
+.faq-item.active {
+  background: rgba(255,255,255,0.2);
 }
 
-/* Footer */
-footer {
-  background: #e5e7eb;
-  padding: 1.5rem;
-  text-align: center;
-  margin-top: 3rem;
-}
-footer a {
-  color: #3b82f6;
-  text-decoration: none;
+/* Rotating arrow */
+.arrow {
+  transition: transform 0.3s ease;
   font-weight: bold;
 }
