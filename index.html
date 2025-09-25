@@ -128,7 +128,7 @@
     try {
       const KEY = "drawscreen_viewed_v1";
       if (!sessionStorage.getItem(KEY)) {
-        runTransaction(viewsRef, (curr) => (curr || 0) + 1);
+        runTransaction(viewsRef, (curr) => (curr) + 1);
         sessionStorage.setItem(KEY, "1");
       }
     } catch (e) {
@@ -212,3 +212,4 @@
   </script>
 </body>
 </html>
+
