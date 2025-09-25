@@ -3,156 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DrawScreen - Draw on your screen easily</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6fa;
-      color: #222;
-      margin: 0;
-      padding: 0;
-      text-align: center;
+  <title>DrawScreen - Draw on your screen</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module">
+    // Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+    import { getDatabase, ref, get, set, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEw59bHhaUpcgYdb9kHVmMNmNoaZO7i48",
+      authDomain: "drawscreen-abfa5.firebaseapp.com",
+      databaseURL: "https://drawscreen-abfa5-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "drawscreen-abfa5",
+      storageBucket: "drawscreen-abfa5.firebasestorage.app",
+      messagingSenderId: "906201269653",
+      appId: "1:906201269653:web:451010cb0e41967e0e229c",
+      measurementId: "G-VMHG8LVS5K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const viewsRef = ref(db, 'stats/views');
+    const downloadsRef = ref(db, 'stats/downloads');
+
+    // Count view
+    runTransaction(viewsRef, (count) => (count || 0) + 1);
+
+    // Update live
+    function updateStats() {
+      get(viewsRef).then(snap => document.getElementById('views-count').innerText = snap.val() ?? 0);
+      get(downloadsRef).then(snap => document.getElementById('downloads-count').innerText = snap.val() ?? 0);
     }
-    header {
-      background: #3b82f6;
-      color: #fff;
-      padding: 2rem 1rem;
+    updateStats();
+
+    // Count downloads
+    function handleDownload() {
+      runTransaction(downloadsRef, (count) => (count || 0) + 1);
+      setTimeout(updateStats, 1000);
+      window.open("https://www.mediafire.com/file/pq0xpfchpbblnly/clientDr.exe/file", "_blank");
     }
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-    header p {
-      margin-top: 0.5rem;
-      font-size: 1.2rem;
-    }
-    main {
-      padding: 2rem 1rem;
-    }
-    .screenshots {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin: 2rem 0;
-    }
-    .screenshots img {
-      max-width: 280px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .download-btn {
-      display: inline-block;
-      padding: 1rem 2rem;
-      background: #22c55e;
-      color: white;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 8px;
-      text-decoration: none;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .download-btn:hover {
-      background: #16a34a;
-    }
-    .stats {
-      margin: 2rem 0;
-      font-size: 1.2rem;
-    }
-    footer {
-      margin-top: 2rem;
-      padding: 1rem;
-      background: #e5e7eb;
-    }
-  </style>
+
+    window.addEventListener("DOMContentLoaded", () => {
+      document.querySelector(".download-btn").addEventListener("click", handleDownload);
+    });
+  </script>
 </head>
 <body>
   <header>
-    <h1>DrawScreen</h1>
-    <p>Lightweight app to draw directly on your screen with hotkeys 🎨</p>
+    <h1>DrawScreen 🎨</h1>
+    <p>A lightweight tool to draw directly on your screen with hotkeys.</p>
+    <button class="download-btn">⬇️ Download Now</button>
   </header>
 
   <main>
-    <h2>Screenshots</h2>
+    <div class="stats">
+      👁️ Views: <span id="views-count">...</span> · ⬇️ Downloads: <span id="downloads-count">...</span>
+    </div>
+
+    <h2 class="section-title">Screenshots</h2>
     <div class="screenshots">
       <img src="assets/ss/ss1.png" alt="Screenshot 1">
       <img src="assets/ss/ss2.png" alt="Screenshot 2">
       <img src="assets/ss/ss3.png" alt="Screenshot 3">
     </div>
 
-    <h2>Download</h2>
-    <button class="download-btn">⬇️ Download Now</button>
-
-    <div class="stats">
-      👁️ Views: <span id="views-count">...</span><br>
-      ⬇️ Downloads: <span id="downloads-count">...</span>
-    </div>
+    <section class="faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>❓ How do I start drawing?</summary>
+        <p>Use <b>CTRL+ALT+Z</b> to toggle the drawing window. Then use hotkeys inside it.</p>
+      </details>
+      <details>
+        <summary>🎨 How do I change brush size?</summary>
+        <p>Press <b>O</b> to increase, <b>I</b> to decrease brush size.</p>
+      </details>
+      <details>
+        <summary>🌈 Can I pick a color?</summary>
+        <p>Yes! Use <b>CTRL+SHIFT+C</b> to pick a color directly from the screen.</p>
+      </details>
+      <details>
+        <summary>💾 How big is the app?</summary>
+        <p>The installer is ~50MB because it includes all required libraries to run smoothly on any PC. So <b>don't</b> go and <b>cry about it on Reddit😉</b> </p>
+      </details>
+    </section>
   </main>
 
   <footer>
-    <p>Made with ❤️ by WhackkQuackk • <a href="https://buymeacoffee.com/whackkquackk">Support me</a></p>
+    <p>☕ Love the project? <a href="https://buymeacoffee.com/whackkquackk" target="_blank">Buy me a coffee a.k.a Donate</a></p>
+    <p>Goal: <b>The Goal Is €12.5</b> to afford a real domain 🚀</p>
   </footer>
-
-  <!-- Firebase Counters -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
-    import { getDatabase, ref, runTransaction, onValue } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js';
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDEw59bHhaUpcgYdb9kHVmMNmNoaZO7i48",
-    authDomain: "drawscreen-abfa5.firebaseapp.com",
-    databaseURL: "https://drawscreen-abfa5-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "drawscreen-abfa5",
-    storageBucket: "drawscreen-abfa5.firebasestorage.app",
-    messagingSenderId: "906201269653",
-    appId: "1:906201269653:web:451010cb0e41967e0e229c",
-    measurementId: "G-VMHG8LVS5K"
-  };
-
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    const viewsRef = ref(db, 'counters/views');
-    const downloadsRef = ref(db, 'counters/downloads');
-
-    async function increment(refNode, delta = 1) {
-      try {
-        await runTransaction(refNode, current => {
-          if (current === null) return delta;
-          return current + delta;
-        });
-      } catch (e) {
-        console.error('Increment error', e);
-      }
-    }
-
-    // Count a view (once per session)
-    (function countViewOnce() {
-      const key = 'drawscreen_viewed_v1';
-      if (!sessionStorage.getItem(key)) {
-        increment(viewsRef, 1);
-        sessionStorage.setItem(key, '1');
-      }
-    })();
-
-    // Update counters live
-    onValue(viewsRef, snap => {
-      document.getElementById('views-count').textContent = snap.val() || 0;
-    });
-    onValue(downloadsRef, snap => {
-      document.getElementById('downloads-count').textContent = snap.val() || 0;
-    });
-
-    // Download button action
-    const dlBtn = document.querySelector('.download-btn');
-    dlBtn.addEventListener('click', async () => {
-      await increment(downloadsRef, 1);
-      setTimeout(() => {
-        window.location.href = "https://www.mediafire.com/file/pq0xpfchpbblnly/clientDr.exe/file"; // <-- replace with your .exe/.zip link
-      }, 150);
-    });
-  </script>
 </body>
 </html>
