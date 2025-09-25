@@ -1,74 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎨 DrawScreen - by Whackk</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DrawScreen — Draw on your screen</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>🎨 DrawScreen</h1>
-    <p>A fun little doodling app by WhackkQuackk</p>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h1>DrawScreen 🎨</h1>
+        <p class="tagline">Draw directly on your screen with keyboard hotkeys — quick, lightweight, and free.</p>
+
+        <div class="cta-row">
+          <button class="download-btn" id="downloadBtn">⬇ Download (50 MB)</button>
+          <a class="donate-btn" href="https://buymeacoffee.com/whackkquackk" target="_blank" rel="noopener">☕ Buy me a coffee</a>
+        </div>
+
+        <div class="live-counters">
+          <div class="counter">👁️ <span id="views-count">–</span> views</div>
+          <div class="counter">⬇️ <span id="downloads-count">–</span> downloads</div>
+        </div>
+      </div>
+
+      <div class="hero-shot">
+        <img src="assets/ss/ss1.png" alt="DrawScreen screenshot" />
+      </div>
+    </div>
   </header>
 
-  <main>
-    <section class="download">
-      <a class="btn" id="downloadBtn" href="https://www.mediafire.com/file/pq0xpfchpbblnly/clientDr.exe/file" target="_blank">⬇ Download (50 MB)</a>
-      <a class="btn donate" href="https://buymeacoffee.com/whackkquackk" target="_blank">☕ Buy me a coffee</a>
-      <div class="stats">
-        <p>👀 Views: <span id="views">0</span></p>
-        <p>⬇ Downloads: <span id="downloads">0</span></p>
+  <main class="container">
+    <section class="about card">
+      <h2>About</h2>
+      <p>
+        Hey — I’m WhackkQuackk. I built <strong>DrawScreen</strong> because I wanted a tiny, no-nonsense tool
+        to quickly sketch on my screen during streams, lessons, and dumb little ideas. It takes one screenshot,
+        lets you draw, pick colors, and change brush size with hotkeys. My goal: keep it simple and free for everyone.
+      </p>
+    </section>
+
+    <section class="screenshots card">
+      <h2>Screenshots</h2>
+      <div class="gallery">
+        <img src="assets/ss/ss1.png" alt="screenshot 1">
+        <img src="assets/ss/ss2.png" alt="screenshot 2">
+        <img src="assets/ss/ss3.png" alt="screenshot 3">
       </div>
     </section>
 
-    <section class="faq">
-      <h2>❓ FAQ</h2>
+    <section class="faq card">
+      <h2>FAQ</h2>
 
       <div class="faq-item">
         <button class="faq-question">
-          <span>What is DrawScreen?</span>
+          <span>How do I start drawing?</span>
           <span class="arrow">▶</span>
         </button>
         <div class="faq-answer">
-          <p>It’s a fun little client that lets you doodle with your screen in real-time.</p>
+          <p>Press <b>CTRL+ALT+Z</b> to toggle the drawing overlay. Use <b>CTRL+ALT+X</b> to quit safely.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question">
-          <span>Is it safe?</span>
+          <span>How do I change brush size?</span>
           <span class="arrow">▶</span>
         </button>
         <div class="faq-answer">
-          <p>Yes! 100% safe. No funny business, just drawing fun.</p>
+          <p>Use <b>O</b> to increase and <b>I</b> to decrease brush size. (Keyboard-first design.)</p>
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question">
-          <span>Why is it 50MB?</span>
+          <span>How do I pick colors?</span>
           <span class="arrow">▶</span>
         </button>
         <div class="faq-answer">
-          <p>It includes the runtime + libraries bundled for convenience. Think of it as a “plug and play” app without extra setup.</p>
+          <p>Press <b>CTRL+SHIFT+C</b> to open the color picker / eyedropper inside the app.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Why is the installer ~50 MB?</span>
+          <span class="arrow">▶</span>
+        </button>
+        <div class="faq-answer">
+          <p>The executable bundles Python and the GUI libs so it runs on any Windows PC without extra setup.</p>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <p>Made with ❤️ by WhackkQuackk</p>
+  <footer class="footer">
+    <div>Goal: <strong>€12.50</strong> — to afford a real domain & hosting</div>
+    <div class="copyright">© 2025 DrawScreen — Made with 🐍</div>
   </footer>
 
+  <!-- Full JS: Firebase + counters + FAQ drawer + Download wiring -->
   <script type="module">
+    // --- Firebase (modular v9 CDN modules) ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getDatabase, ref, increment, update, get, child } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-    // --- Firebase config ---
+    // ==== YOUR FIREBASE CONFIG (as you provided) ====
     const firebaseConfig = {
       apiKey: "AIzaSyDEw59bHhaUpcgYdb9kHVmMNmNoaZO7i48",
       authDomain: "drawscreen-abfa5.firebaseapp.com",
@@ -80,46 +117,95 @@
       measurementId: "G-VMHG8LVS5K"
     };
 
-    // --- Init Firebase ---
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Update view count
+    // refs
     const viewsRef = ref(db, "stats/views");
-    update(viewsRef, { count: increment(1) });
+    const downloadsRef = ref(db, "stats/downloads");
 
-    // Fetch counts
-    const fetchStats = async () => {
-      const snapshot = await get(child(ref(db), "stats"));
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        document.getElementById("views").textContent = data.views?.count || 0;
-        document.getElementById("downloads").textContent = data.downloads?.count || 0;
+    // --- increment view once per session ---
+    try {
+      const KEY = "drawscreen_viewed_v1";
+      if (!sessionStorage.getItem(KEY)) {
+        runTransaction(viewsRef, (curr) => (curr || 0) + 1);
+        sessionStorage.setItem(KEY, "1");
       }
-    };
-    fetchStats();
+    } catch (e) {
+      console.warn("view increment failed", e);
+    }
 
-    // Increment downloads on click
-    document.getElementById("downloadBtn").addEventListener("click", () => {
-      const dlRef = ref(db, "stats/downloads");
-      update(dlRef, { count: increment(1) });
+    // --- live listeners to update UI ---
+    onValue(viewsRef, snap => {
+      const v = snap.val() || 0;
+      document.getElementById("views-count").textContent = v;
+    });
+    onValue(downloadsRef, snap => {
+      const v = snap.val() || 0;
+      document.getElementById("downloads-count").textContent = v;
     });
 
-    // --- FAQ toggle ---
-    document.querySelectorAll(".faq-question").forEach(button => {
-      button.addEventListener("click", () => {
-        const faqItem = button.parentElement;
-        const answer = faqItem.querySelector(".faq-answer");
-        const arrow = button.querySelector(".arrow");
+    // --- download button increments + opens link ---
+    const downloadUrl = "https://www.mediafire.com/file/pq0xpfchpbblnly/clientDr.exe/file";
+    const dlBtn = document.getElementById("downloadBtn");
+    dlBtn.addEventListener("click", async (e) => {
+      try {
+        // disable brief to avoid spam
+        dlBtn.disabled = true;
+        dlBtn.textContent = "Preparing...";
+        await runTransaction(downloadsRef, (curr) => (curr || 0) + 1);
+      } catch (err) {
+        console.warn("download increment failed", err);
+      } finally {
+        // small timeout for UX, then open
+        setTimeout(() => {
+          window.open(downloadUrl, "_blank", "noopener");
+          dlBtn.disabled = false;
+          dlBtn.textContent = "⬇ Download (50 MB)";
+        }, 200);
+      }
+    });
 
-        faqItem.classList.toggle("active");
+    // --- FAQ drawer animation (robust open/close every time) ---
+    document.querySelectorAll(".faq-item").forEach(item => {
+      const btn = item.querySelector(".faq-question");
+      const answer = item.querySelector(".faq-answer");
+      const arrow = item.querySelector(".arrow");
 
-        if (faqItem.classList.contains("active")) {
+      // ensure answer has no inline maxHeight so CSS controls initial closed state
+      answer.style.maxHeight = "0px";
+
+      btn.addEventListener("click", () => {
+        const isOpen = item.classList.contains("active");
+
+        if (isOpen) {
+          // animate close: set to current height then to 0 to allow transition
+          answer.style.maxHeight = answer.scrollHeight + "px";
+          // force reflow then collapse
+          requestAnimationFrame(() => {
+            answer.style.maxHeight = "0px";
+          });
+          item.classList.remove("active");
+          arrow.style.transform = "rotate(0deg)";
+        } else {
+          // open: set maxHeight to scrollHeight so it transitions open
+          item.classList.add("active");
           answer.style.maxHeight = answer.scrollHeight + "px";
           arrow.style.transform = "rotate(90deg)";
-        } else {
-          answer.style.maxHeight = null;
-          arrow.style.transform = "rotate(0deg)";
+          // when transition ends, keep it 'auto' so content resizing doesn't clip
+          const onEnd = () => {
+            // set to none so it can expand if internal content grows; remove handler after
+            answer.style.maxHeight = "none";
+            answer.removeEventListener("transitionend", onEnd);
+          };
+          answer.addEventListener("transitionend", onEnd);
+        }
+      });
+
+      // If window resizes while open, update maxHeight
+      window.addEventListener("resize", () => {
+        if (item.classList.contains("active")) {
+          answer.style.maxHeight = answer.scrollHeight + "px";
         }
       });
     });
