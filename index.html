@@ -2,13 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DrawScreen - Draw on your screen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎨 DrawScreen - by Whackk</title>
   <link rel="stylesheet" href="style.css">
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-    import { getDatabase, ref, get, set, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+</head>
+<body>
+  <header>
+    <h1>🎨 DrawScreen</h1>
+    <p>A fun little doodling app by WhackkQuackk</p>
+  </header>
 
+  <main>
+    <section class="download">
+      <a class="btn" id="downloadBtn" href="https://www.mediafire.com/file/pq0xpfchpbblnly/clientDr.exe/file" target="_blank">⬇ Download (50 MB)</a>
+      <a class="btn donate" href="https://buymeacoffee.com/whackkquackk" target="_blank">☕ Buy me a coffee</a>
+      <div class="stats">
+        <p>👀 Views: <span id="views">0</span></p>
+        <p>⬇ Downloads: <span id="downloads">0</span></p>
+      </div>
+    </section>
+
+    <section class="faq">
+      <h2>❓ FAQ</h2>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>What is DrawScreen?</span>
+          <span class="arrow">▶</span>
+        </button>
+        <div class="faq-answer">
+          <p>It’s a fun little client that lets you doodle with your screen in real-time.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Is it safe?</span>
+          <span class="arrow">▶</span>
+        </button>
+        <div class="faq-answer">
+          <p>Yes! 100% safe. No funny business, just drawing fun.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Why is it 50MB?</span>
+          <span class="arrow">▶</span>
+        </button>
+        <div class="faq-answer">
+          <p>It includes the runtime + libraries bundled for convenience. Think of it as a “plug and play” app without extra setup.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made with ❤️ by WhackkQuackk</p>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, increment, update, get, child } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    // --- Firebase config ---
     const firebaseConfig = {
       apiKey: "AIzaSyDEw59bHhaUpcgYdb9kHVmMNmNoaZO7i48",
       authDomain: "drawscreen-abfa5.firebaseapp.com",
@@ -20,96 +80,49 @@
       measurementId: "G-VMHG8LVS5K"
     };
 
+    // --- Init Firebase ---
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    const viewsRef = ref(db, 'stats/views');
-    const downloadsRef = ref(db, 'stats/downloads');
+    // Update view count
+    const viewsRef = ref(db, "stats/views");
+    update(viewsRef, { count: increment(1) });
 
-    runTransaction(viewsRef, (count) => (count || 0) + 1);
+    // Fetch counts
+    const fetchStats = async () => {
+      const snapshot = await get(child(ref(db), "stats"));
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        document.getElementById("views").textContent = data.views?.count || 0;
+        document.getElementById("downloads").textContent = data.downloads?.count || 0;
+      }
+    };
+    fetchStats();
 
-    function updateStats() {
-      get(viewsRef).then(snap => document.getElementById('views-count').innerText = snap.val() ?? 0);
-      get(downloadsRef).then(snap => document.getElementById('downloads-count').innerText = snap.val() ?? 0);
-    }
-    updateStats();
+    // Increment downloads on click
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      const dlRef = ref(db, "stats/downloads");
+      update(dlRef, { count: increment(1) });
+    });
 
-    function handleDownload() {
-      runTransaction(downloadsRef, (count) => (count || 0) + 1);
-      setTimeout(updateStats, 1000);
-      window.open("https://www.mediafire.com/file/pq0xpfchpbblnly/clientDr.exe/file", "_blank");
-    }
+    // --- FAQ toggle ---
+    document.querySelectorAll(".faq-question").forEach(button => {
+      button.addEventListener("click", () => {
+        const faqItem = button.parentElement;
+        const answer = faqItem.querySelector(".faq-answer");
+        const arrow = button.querySelector(".arrow");
 
-    window.addEventListener("DOMContentLoaded", () => {
-      document.querySelector(".download-btn").addEventListener("click", handleDownload);
+        faqItem.classList.toggle("active");
 
-      // Animate FAQ expansion
-      document.querySelectorAll("details").forEach((el) => {
-        el.addEventListener("toggle", () => {
-          if (el.open) {
-            const content = el.querySelector(".faq-content");
-            content.style.maxHeight = content.scrollHeight + "px";
-          } else {
-            el.querySelector(".faq-content").style.maxHeight = null;
-          }
-        });
+        if (faqItem.classList.contains("active")) {
+          answer.style.maxHeight = answer.scrollHeight + "px";
+          arrow.style.transform = "rotate(90deg)";
+        } else {
+          answer.style.maxHeight = null;
+          arrow.style.transform = "rotate(0deg)";
+        }
       });
     });
   </script>
-</head>
-<body>
-  <header>
-    <h1>DrawScreen 🎨</h1>
-    <p>A lightweight tool to draw directly on your screen with hotkeys.</p>
-    <button class="download-btn">⬇️ Download Now</button>
-  </header>
-
-  <main>
-    <div class="stats">
-      👁️ Views: <span id="views-count">...</span> · ⬇️ Downloads: <span id="downloads-count">...</span>
-    </div>
-
-    <h2 class="section-title">Screenshots</h2>
-    <div class="screenshots">
-      <img src="assets/ss/ss1.png" alt="Screenshot 1">
-      <img src="assets/ss/ss2.png" alt="Screenshot 2">
-      <img src="assets/ss/ss3.png" alt="Screenshot 3">
-    </div>
-
-    <section class="about">
-      <h2>About Me</h2>
-      <p>
-        Hey! I’m the creator of <b>DrawScreen</b>.  
-        I built this because I was amazed by how useful it is to simply sketch over your screen 
-        — whether for teaching, brainstorming, or just doodling for fun.  
-        My goal is to keep this tool lightweight, free, and easy to use. 🚀
-      </p>
-    </section>
-
-    <section class="faq">
-      <h2>FAQ</h2>
-      <details>
-        <summary>❓ How do I start drawing?</summary>
-        <div class="faq-content"><p>Use <b>CTRL+ALT+Z</b> to toggle the drawing window. Then use hotkeys inside it.</p></div>
-      </details>
-      <details>
-        <summary>🎨 How do I change brush size?</summary>
-        <div class="faq-content"><p>Press <b>O</b> to increase, <b>I</b> to decrease brush size.</p></div>
-      </details>
-      <details>
-        <summary>🌈 Can I pick a color?</summary>
-        <div class="faq-content"><p>Yes! Use <b>CTRL+SHIFT+C</b> to pick a color directly from the screen.</p></div>
-      </details>
-      <details>
-        <summary>💾 How big is the app?</summary>
-        <div class="faq-content"><p>The installer is ~50MB because it includes all required libraries to run smoothly on any PC.</p></div>
-      </details>
-    </section>
-  </main>
-
-  <footer>
-    <p>☕ Love the project? <a href="https://buymeacoffee.com/whackkquackk" target="_blank">Donate!</a></p>
-    <p>Goal: <b>€12.5</b> to afford a real domain 🚀</p>
-  </footer>
 </body>
 </html>
